@@ -5,17 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="53a9670b-93d5-49d1-ba09-627fbdd90af3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ConnectionGene.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Genome.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/InnovationCounter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/NodeGene.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/TestCrossover.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/NEATConfiguration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/neuralNetwork/Network.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/neuralNetwork/Neuron.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/TestAddConnectionMutation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/TestNodeMutation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/TestXORNN.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ConnectionGene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ConnectionGene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Genome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Genome.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/TestCrossover.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestCrossover.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,20 +40,50 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "D:/projects/codewars-java"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/projects/codewars-java&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.TestNodeMutation">
+    <configuration name="TestAddConnectionMutation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="TestAddConnectionMutation" />
+      <module name="diplomaJava" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestCrossover" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="TestCrossover" />
+      <module name="diplomaJava" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestNodeMutation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="TestNodeMutation" />
+      <module name="diplomaJava" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestCrossover" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="diplomaJava" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TestCrossover" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="TestCrossover.crossovertest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="diplomaJava" />
       <option name="PACKAGE_NAME" value="" />
@@ -67,6 +96,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.TestNodeMutation" />
+        <item itemvalue="Application.TestAddConnectionMutation" />
+        <item itemvalue="Application.TestCrossover" />
+        <item itemvalue="JUnit.TestCrossover" />
         <item itemvalue="JUnit.TestCrossover.crossovertest" />
       </list>
     </recent_temporary>

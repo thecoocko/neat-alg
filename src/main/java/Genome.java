@@ -1,6 +1,7 @@
 import java.util.*;
 
 public class Genome {
+    private final float PROBABILITY_PERTURBING = 0.9f;
     Map<Integer,ConnectionGene> connections;
     Map<Integer,NodeGene> nodeGenes;
 
@@ -8,8 +9,8 @@ public class Genome {
     //mutation
 
     public Genome(){
-        connections = new HashMap<Integer,ConnectionGene>();
-        nodeGenes = new HashMap<Integer,NodeGene>();
+        connections = new HashMap<>();
+        nodeGenes = new HashMap<>();
         this.innovationNumber = innovationNumber;
     }
 
@@ -29,48 +30,111 @@ public class Genome {
         connections.put(gene.getInnovation(),gene);
     }
 
-    public void addConnectionMutation(Random r){
-        float weight = r.nextFloat()*2f-1f;
-        NodeGene node1 = nodeGenes.get(r.nextInt(nodeGenes.size()));
-        NodeGene node2 = nodeGenes.get(r.nextInt(nodeGenes.size()));
-        boolean reversed = false;//якщо тут у нас реверсе - тру, то нам потрібно з'єднати ноду 1 та ноду 2
-        if(node1.getType()== NodeGene.TYPE.HIDDEN && node2.getType()==NodeGene.TYPE.OUTPUT){
-            reversed = true;
-        } else if (node1.getType()== NodeGene.TYPE.OUTPUT && node2.getType()==NodeGene.TYPE.HIDDEN) {
-            reversed = true;
-        }else if(node1.getType()== NodeGene.TYPE.OUTPUT && node2.getType()==NodeGene.TYPE.INPUT){
-            reversed = true;
+    public void addConnectionMutation(Random r, InnovationCounter counter, int maxAttempts){
+        int tries = 0;
+        boolean success = false;
+        while (tries < maxAttempts && !success) {
+            tries++;
+
+            Integer[] nodeInnovationNumbers = new Integer[nodeGenes.keySet().size()];
+            nodeGenes.keySet().toArray(nodeInnovationNumbers);
+            Integer keyNode1 = nodeInnovationNumbers[r.nextInt(nodeInnovationNumbers.length)];
+            Integer keyNode2 = nodeInnovationNumbers[r.nextInt(nodeInnovationNumbers.length)];
+
+            NodeGene node1 = nodeGenes.get(keyNode1);
+            NodeGene node2 = nodeGenes.get(keyNode2);
+            float weight = r.nextFloat()*2f-1f;
+
+            boolean reversed = false;
+            if (node1.getType() == NodeGene.TYPE.HIDDEN && node2.getType() == NodeGene.TYPE.INPUT) {
+                reversed = true;
+            } else if (node1.getType() == NodeGene.TYPE.OUTPUT && node2.getType() == NodeGene.TYPE.HIDDEN) {
+                reversed = true;
+            } else if (node1.getType() == NodeGene.TYPE.OUTPUT && node2.getType() == NodeGene.TYPE.INPUT) {
+                reversed = true;
+            }
+            if (reversed) {
+                NodeGene tmp = node1;
+                node1 = node2;
+                node2 = tmp;
+            }
+
+            boolean connectionImpossible = false;
+            if (node1.getType() == NodeGene.TYPE.INPUT && node2.getType() == NodeGene.TYPE.INPUT) {
+                connectionImpossible = true;
+            } else if (node1.getType() == NodeGene.TYPE.OUTPUT && node2.getType() == NodeGene.TYPE.OUTPUT) {
+                connectionImpossible = true;
+            } else if (node1 == node2) {
+                connectionImpossible = true;
+            }
+
+            /* check for circular structures */
+            List<Integer> needsChecking = new LinkedList<>(); 	// list of nodes that should have their connections checked
+            List<Integer> nodeIDs = new LinkedList<>(); 			// list of nodes that requires output from node2
+            for (Integer connID : connections.keySet()) {
+                ConnectionGene gene = connections.get(connID);
+                if (gene.getInNode() == node2.getId()) { // connection comes from node2
+                    nodeIDs.add(gene.getOutNode());
+                    needsChecking.add(gene.getOutNode());
+                }
+            }
+            while (!needsChecking.isEmpty()) {
+                int nodeID = needsChecking.get(0);
+                for (Integer connID : connections.keySet()) {
+                    ConnectionGene gene = connections.get(connID);
+                    if (gene.getInNode() == nodeID) { // connection comes from the needsChecking node
+                        nodeIDs.add(gene.getOutNode());
+                        needsChecking.add(gene.getOutNode());
+                    }
+                }
+                needsChecking.remove(0);
+            }
+            for (Integer i : nodeIDs) { // loop through dependent nodes
+                if (i == node1.getId()) { // if we make it here, then node1 calculation is dependent on node2 calculation, creating a deadlock
+                    connectionImpossible = true;
+                }
+            }
+
+            boolean connectionExists = false;
+            for (ConnectionGene con : connections.values()) {
+                if (con.getInNode() == node1.getId() && con.getOutNode() == node2.getId()) { // existing connection
+                    connectionExists = true;
+                    break;
+                } else if (con.getInNode() == node2.getId() && con.getOutNode() == node1.getId()) { // existing reverse connection
+                    connectionExists = true;
+                    break;
+                }
+            }
+
+            if (connectionExists || connectionImpossible) {
+                continue;
+            }
+
+            ConnectionGene newCon = new ConnectionGene(weight,node1.getId(), node2.getId(), true, counter.getCounter());
+            connections.put(newCon.getInnovation(), newCon);
+            success = true;
         }
-        boolean isConnection = false;
-        for(ConnectionGene c : connections.values()){//перевіряємо наявність зв'язку
-            if(c.getInNode() == node1.getId() && c.getOutNode() ==node2.getId()) {//existing connection
-                isConnection = true;
-                break;
-            } else if (c.getInNode() == node2.getId() && c.getOutNode() ==node1.getId()) {
-                isConnection = true;
-                break;
+    }
+    public void mutation(Random r) {
+        for(ConnectionGene con : connections.values()) {
+            if (r.nextFloat() < PROBABILITY_PERTURBING) { 			// uniformly perturbing weights
+                con.setWeight(con.getWeight()*(r.nextFloat()*4f-2f)); // scale weight by between -2 and 2
+            } else { 												// assigning new weight
+                con.setWeight(r.nextFloat()*4f-2f);	// assign new weight between -2 and 2
             }
         }
-        if(isConnection){
-            return;
-        }
-         ConnectionGene newConnection = new ConnectionGene(weight,reversed? node2.getId() : node1.getId(),reversed? node1.getId() : node2.getId(),true,2);
-        connections.put(newConnection.getInnovation(),newConnection);
-    }
-    public  void  mutation (Random r){
-
     }
 
-    public void addNodeMutation(Random r){//
-        InnovationCounter counter = new InnovationCounter();
+    public void addNodeMutation(Random r,InnovationCounter connectionInnovation, InnovationCounter nodeInnovation){//
+
         ConnectionGene c = connections.get(r.nextInt(connections.size()));
 
         NodeGene inNode = nodeGenes.get(c.getInNode());
         NodeGene outNode = nodeGenes.get(c.getOutNode());
         c.disable();
-        NodeGene newNode = new NodeGene(NodeGene.TYPE.HIDDEN, nodeGenes.size());
-        ConnectionGene inNew = new ConnectionGene(1f,inNode.getId(),newNode.getId(),true,counter.getCounter());
-        ConnectionGene outNew = new ConnectionGene(c.getWeight(),newNode.getId(),outNode.getId(),true,counter.getCounter());
+        NodeGene newNode = new NodeGene(NodeGene.TYPE.HIDDEN, nodeInnovation.getCounter());
+        ConnectionGene inNew = new ConnectionGene(1f,inNode.getId(),newNode.getId(),true,connectionInnovation.getCounter());
+        ConnectionGene outNew = new ConnectionGene(c.getWeight(),newNode.getId(),outNode.getId(),true,connectionInnovation.getCounter());
 
         nodeGenes.put(newNode.getId(),newNode);
         connections.put(inNew.getInnovation(),inNew);

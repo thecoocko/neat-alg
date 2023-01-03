@@ -1,24 +1,10 @@
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
 import java.util.Random;
 
-import static org.junit.Assert.assertEquals;
+
 
 public class TestCrossover {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
-    @BeforeClass
-    public static void globalSetUp() {
-        System.out.println("Initial setup...");
-        System.out.println("Code executes only once");
-    }
-
-
-    public Genome setUpFather() {
+    public static Genome setUpFather() {
         Genome father = new Genome();
         for (int i = 0; i < 3; i++) {
             NodeGene node = new NodeGene(NodeGene.TYPE.INPUT,i+1);
@@ -57,7 +43,7 @@ public class TestCrossover {
         return father;
     }
 
-    public Genome setUpMother() {
+    public static Genome setUpMother() {
 
         Genome mother = new Genome();
         for (int i = 0; i < 3; i++) {
@@ -81,11 +67,12 @@ public class TestCrossover {
 
         return mother;
     }
-    @Test
-    public void crossovertest(){//Так як перший предок самий жирний то я хочу викоритстати предок як матір
+
+    public static void main(String[] args) {
+        //Так як перший предок самий жирний то я хочу викоритстати предок як матір
        Genome child = Genome.crossover(setUpMother(),setUpFather(),new Random());
-       child.getGenes().forEach((k,v)->System.out.println("KEY: "+k+"\tVALUE: "+v.getWeight()+"\tVALUE IN NODE: "+v.getInNode()+"\tVALUE OUT NODE: "+v.getOutNode()));
-        assertEquals(-1,0);
+       child.getGenes().forEach((k,v)->System.out.println("KEY: "+k+"\tVALUE: "+v.getWeight()+"\tIN NODE: "+v.getInNode()+"\tOUT NODE: "+v.getOutNode()));
+
 
     }
 }

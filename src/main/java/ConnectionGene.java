@@ -13,6 +13,26 @@ public class ConnectionGene {
         this.innovation = innovation;
     }
 
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    public void setInNode(int inNode) {
+        this.inNode = inNode;
+    }
+
+    public void setOutNode(int outNode) {
+        this.outNode = outNode;
+    }
+
+    public void setExpressed(boolean expressed) {
+        this.expressed = expressed;
+    }
+
+    public void setInnovation(int innovation) {
+        this.innovation = innovation;
+    }
+
     public float getWeight() {
         return weight;
     }
